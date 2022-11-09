@@ -2,6 +2,7 @@
 def print_data_row(i):
     print_ln('%s %s %s %s %s %s', data[i][0].reveal(), data[i][1].reveal(), data[i][2].reveal(), data[i][3].reveal(),data[i][4].reveal(),data[i][5].reveal())
 
+
 program.use_split(3)
 source = 0
 n = 100000
