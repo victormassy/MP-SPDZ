@@ -1,0 +1,22 @@
+
+def print_data_row(i):
+    print_ln('%s %s %s %s %s %s', data[i][0].reveal(), data[i][1].reveal(), data[i][2].reveal(), data[i][3].reveal(),data[i][4].reveal(),data[i][5].reveal())
+
+program.use_split(3)
+source = 0
+n = 100000
+
+data = Matrix(n, 6, sint)
+
+@for_range_opt(n)
+def _(i):
+    for j in range(6):
+        data[i][j] = sint.get_input_from(source)
+
+
+data.sort(n_bits=32)
+
+
+@for_range_opt(n)
+def _(i):
+        print_data_row(i)
