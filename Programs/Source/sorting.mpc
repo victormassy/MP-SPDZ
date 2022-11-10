@@ -17,7 +17,8 @@ def _(i):
 
 data.sort(n_bits=32)
 
-
+"""
 @for_range_opt(n)
 def _(i):
         print_data_row(i)
+"""
