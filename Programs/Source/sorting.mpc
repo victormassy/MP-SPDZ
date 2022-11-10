@@ -5,7 +5,7 @@ def print_data_row(i):
 
 program.use_split(3)
 source = 0
-n = 100000
+n = 1000000
 
 data = Matrix(n, 6, sint)
 
