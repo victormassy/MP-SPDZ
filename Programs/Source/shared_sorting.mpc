@@ -5,20 +5,22 @@ def print_data_row(i):
 
 program.use_split(3)
 source = 0
-n = 1000000
+n = 100
+key = 0
 
 data = Matrix(n, 6, sint)
 
 @for_range_opt(n)
 def _(i):
+    key = 0
     for j in range(6):
-	for k in range(3):
-        	key += sint.get_input_from(k)
-	data[i][j] = key
-	key = 0
-
+       for k in range(3):
+       	   key = key + sint.get_input_from(k)
+       data[i][j] = key
+       key = 0
+"""
 data.sort(n_bits=32)
-
+"""
 
 @for_range_opt(n)
 def _(i):
