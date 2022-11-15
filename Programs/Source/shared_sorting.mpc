@@ -5,7 +5,7 @@ def print_data_row(i):
 
 program.use_split(3)
 source = 0
-n = 100
+n = 10
 key = 0
 
 data = Matrix(n, 6, sint)
@@ -18,6 +18,9 @@ def _(i):
        	   key = key + sint.get_input_from(k)
        data[i][j] = key
        key = 0
+
+
+
 """
 data.sort(n_bits=32)
 """
