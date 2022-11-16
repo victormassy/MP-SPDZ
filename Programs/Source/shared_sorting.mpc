@@ -15,15 +15,15 @@ nb_parties = 3
 
 
 def load_data(nb_rows, nb_parties):   
-    reports = Matrix(nb_rows, 6, sint) 
+    reports = Matrix(nb_rows, 6, sint)
     @for_range_opt(nb_rows)
     def _(i): 
       #For each field in the report 
-      for j in range(6):
+      for j in range(6): 
          #Read input from different parties 
          for k in range(nb_parties):
             #Sum shares
-            reports[i][j] = sint.get_input_from(k) 
+            reports[i][j] += sint.get_input_from(k) 
     match_keys = reports.get_column(0)
     return reports, match_keys
 
