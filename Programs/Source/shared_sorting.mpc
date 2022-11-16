@@ -1,10 +1,10 @@
-from Compiler.IPAsorts import two_bit_radix_sort
-from Compiler.IPAsorts import radix_sort
+#from Compiler.IPAsorts import two_bit_radix_sort
+#from Compiler.IPAsorts import radix_sort
 from Compiler.IPAsorts import mp_spdz_radix_sort
-from Compiler.IPAsorts import batcher_sort
+#from Compiler.IPAsorts import batcher_sort
 #from Compiler.quicksort import quicksort
-from Compiler.library import sort as quicksort 
-from Compiler.library import odd_even_merge_sort
+#from Compiler.library import sort as quicksort 
+#from Compiler.library import odd_even_merge_sort
 
 
 def print_reports_row(data, i):
@@ -38,6 +38,6 @@ nb_parties = 3
 reports, match_keys = load_data(nb_rows, nb_parties)
 
 
-quicksort(reports)
+reports.sort(n_bits=32)
 
 print_reports(reports, nb_rows)
