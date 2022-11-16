@@ -2,17 +2,18 @@ from Compiler.IPAsorts import two_bit_radix_sort
 from Compiler.IPAsorts import radix_sort
 from Compiler.IPAsorts import mp_spdz_radix_sort
 from Compiler.IPAsorts import batcher_sort
-from Compiler.quicksort import quicksort
+#from Compiler.quicksort import quicksort
+from Compiler.library import sort as quicksort 
+from Compiler.library import odd_even_merge_sort
 
 
 def print_reports_row(data, i):
     print_ln('%s %s %s %s %s %s', data[i][0].reveal(), data[i][1].reveal(), data[i][2].reveal(), data[i][3].reveal(),data[i][4].reveal(),data[i][5].reveal())
 
-
-program.use_split(3)
-nb_rows = 10000
-nb_parties = 3 
-
+def print_reports(reports, nb_rows):
+   @for_range_opt(nb_rows)
+   def _(i):
+       print_reports_row(reports,i)
 
 def load_data(nb_rows, nb_parties):   
     reports = Matrix(nb_rows, 6, sint)
@@ -23,20 +24,25 @@ def load_data(nb_rows, nb_parties):
          #Read input from different parties 
          for k in range(nb_parties):
             #Sum shares
-            reports[i][j] += sint.get_input_from(k) 
-    match_keys = reports.get_column(0)
+            reports[i][j] = sint.get_input_from(k) 
+    match_keys = reports.get_column(1)
     return reports, match_keys
 
-def print_reports(reports, nb_rows):
-   @for_range_opt(nb_rows)
-   def _(i):
-       print_reports_row(reports,i)
+
+
+program.use_split(3)
+nb_rows = 64
+nb_parties = 3
 
 
 reports, match_keys = load_data(nb_rows, nb_parties)
 
-print_reports(reports,nb_rows)
+#print_reports(reports,nb_rows)
 
-#quicksort(match_keys, 0, nb_rows-1)
+print_ln("%s", match_keys.reveal())
+
+
+#match_keys.sort().print_reveal_nested()
+
 
 #print_reports(reports, nb_rows)
