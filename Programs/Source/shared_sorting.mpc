@@ -37,7 +37,7 @@ nb_parties = 3
 
 reports, match_keys = load_data(nb_rows, nb_parties)
 
-#print_reports(reports,nb_rows)
+print_reports(reports,nb_rows)
 
 print_ln("%s", match_keys.reveal())
 print_ln("%s", reports.reveal())
