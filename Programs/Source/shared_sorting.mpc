@@ -1,34 +1,43 @@
+from Compiler.IPAsorts import two_bit_radix_sort
+from Compiler.IPAsorts import radix_sort
 from Compiler.IPAsorts import mp_spdz_radix_sort
+from Compiler.IPAsorts import batcher_sort
+from Compiler.quicksort import quicksort
 
-def print_data_row(i):
+
+def print_reports_row(data, i):
     print_ln('%s %s %s %s %s %s', data[i][0].reveal(), data[i][1].reveal(), data[i][2].reveal(), data[i][3].reveal(),data[i][4].reveal(),data[i][5].reveal())
 
 
 program.use_split(3)
-source = 0
-n = 10000
-key = 0
+nb_rows = 10000
+nb_parties = 3 
 
-match_keys = Array(n, sint)
-data = Matrix(n, 6, sint)
+def load_data(nb_rows, nb_parties):   
+    reports = Matrix(nb_rows, 6, sint) 
+    shares = Array(nb_parties, sint) 
+    @for_range_opt(nb_rows)
+    def _(i): 
+      #For each field in the report 
+      for j in range(6):
+         #Read input from different parties 
+         for k in range(nb_parties):
+            #Sum shares
+            shares[k] = sint.get_input_from(k) 
+         reports[i][j] = shares[0] + shares[1] + shares[2]
+    match_keys = reports.get_column(0)
+    return reports, match_keys
 
-@for_range_opt(n)
-def _(i):
-    for j in range(6):
-       value = 0
-       for k in range(3):
-       	   value += sint.get_input_from(k)
-       data[i][j] = value
-       if(j==0):
-            match_keys[i] = value
+def print_reports(reports, nb_rows):
+   @for_range_opt(nb_rows)
+   def _(i):
+       print_reports_row(reports,i)
 
 
+reports, match_keys = load_data(nb_rows, nb_parties)
 
-mp_spdz_radix_sort(match_keys, data)
-data.sort(n_bits=32)
+print_reports(reports,nb_rows)
 
+#quicksort(match_keys, 0, nb_rows-1)
 
-@for_range_opt(n)
-def _(i):
-        print_data_row(i)
-
+#print_reports(reports, nb_rows)
