@@ -3,8 +3,8 @@
 from Compiler.IPAsorts import mp_spdz_radix_sort
 #from Compiler.IPAsorts import batcher_sort
 #from Compiler.quicksort import quicksort
-#from Compiler.library import sort as quicksort 
-#from Compiler.library import odd_even_merge_sort
+from Compiler.library import sort as quicksort 
+from Compiler.library import odd_even_merge_sort
 
 
 def print_reports_row(data, i):
@@ -31,13 +31,13 @@ def load_data(nb_rows, nb_parties):
 
 
 program.use_split(3)
-nb_rows = 100
+nb_rows = 10
 nb_parties = 3
 
 
 reports, match_keys = load_data(nb_rows, nb_parties)
 
 
-reports.sort(n_bits=32)
+quicksort(reports)
 
 print_reports(reports, nb_rows)
