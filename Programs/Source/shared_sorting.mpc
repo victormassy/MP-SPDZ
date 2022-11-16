@@ -25,7 +25,7 @@ def load_data(nb_rows, nb_parties):
          for k in range(nb_parties):
             #Sum shares
             reports[i][j] = sint.get_input_from(k) 
-    match_keys = reports.get_column(1)
+    match_keys = reports.get_column(0)
     return reports, match_keys
 
 
@@ -40,6 +40,7 @@ reports, match_keys = load_data(nb_rows, nb_parties)
 #print_reports(reports,nb_rows)
 
 print_ln("%s", match_keys.reveal())
+print_ln("%s", reports.reveal())
 
 
 #match_keys.sort().print_reveal_nested()
