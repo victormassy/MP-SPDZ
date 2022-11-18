@@ -1,43 +1,85 @@
 #from Compiler.IPAsorts import two_bit_radix_sort
-#from Compiler.IPAsorts import radix_sort
+from Compiler.IPAsorts import radix_sort
 from Compiler.IPAsorts import mp_spdz_radix_sort
 #from Compiler.IPAsorts import batcher_sort
 #from Compiler.quicksort import quicksort
 from Compiler.library import sort as quicksort 
 from Compiler.library import odd_even_merge_sort
-
+from Compiler.instructions import print_reg 
 
 def print_reports_row(data, i):
-    print_ln('%s %s %s %s %s %s', data[i][0].reveal(), data[i][1].reveal(), data[i][2].reveal(), data[i][3].reveal(),data[i][4].reveal(),data[i][5].reveal())
+    	print_ln('%s %s %s %s %s %s', data[i][0].reveal(), data[i][1].reveal(), data[i][2].reveal(), data[i][3].reveal(),data[i][4].reveal(),data[i][5].reveal())
 
 def print_reports(reports, nb_rows):
-   @for_range_opt(nb_rows)
-   def _(i):
-       print_reports_row(reports,i)
+   	@for_range_opt(nb_rows)
+   	def _(i):
+      		print_reports_row(reports,i)
 
 def load_data(nb_rows, nb_parties):   
-    reports = Matrix(nb_rows, 6, sint)
-    @for_range_opt(nb_rows)
-    def _(i): 
+    	reports = Matrix(nb_rows, 6, sint)
+    	match_keys = Array(nb_rows, sint)
+    	@for_range_opt(nb_rows)
+    	def _(i): 
       #For each field in the report 
-      for j in range(6): 
+      		for j in range(6): 
          #Read input from different parties 
-         for k in range(nb_parties):
+       	  		for k in range(nb_parties):
             #Sum shares
-            reports[i][j] = sint.get_input_from(k) 
-    match_keys = reports.get_column(0)
-    return reports, match_keys
+            			reports[i][j] = sint.get_input_from(k) 
+      		match_keys[i] = reports[i][0]
+    	return reports, match_keys
 
+def floor_div(x, y):
+	k = 0 
+	while(x -y > 0):
+		x -= y
+		k += 1
+	return k 
 
+def HashSort(data, N, low):
+	global cDim 
+	cDim = cint(2**16)
+	global sDim 
+	sDim = sint(2**16)
+	global swapCount 
+	swapCount = cint(0)
+	global hysteresisCount 
+	hysteresisCount = cint(0)
+	global position 
+	position = cint(0)         
+	@do_while
+	def _():
+		global position
+		global cDim
+		global sDim
+		global swapCount
+		global hysteresisCount 
+		value = data[(position)//cDim+(position)%cDim]
+		d = (value-low).int_div(sDim)
+		m = (value-low).int_mod(sint(16), bit_length=None)	
+		position += 1 
+		hysteresisCount += 1 
+		bool = (data[d.reveal()+m.reveal()] == value) == 1 
+		
+		sPosition = bool.if_else(position + 1,position)
+		position = sPosition.reveal()
+		sHysteresisCount = bool.if_else(hysteresisCount + 1, hysteresisCount) 
+		hysteresisCount = sHysteresisCount.reveal()
+		temp = bool.if_else(data[d.reveal()+m.reveal()],data[(position // cDim)+ (position % cDim)])
+		data[(position) // cDim+(position) % cDim] = bool.if_else(data[(position) // cDim+(position) % cDim], data[d.reveal()+m.reveal()])
+		data[d.reveal()+m.reveal()] = temp 
+		sSwapCount = bool.if_else(swapCount + 1, swapCount)
+		swapCount = sSwapCount.reveal()
+		return (swapCount < N) + (hysteresisCount < N)
+	return data
 
-program.use_split(3)
-nb_rows = 10
+#program.use_split(3)
+nb_rows = 128
 nb_parties = 3
 
 
 reports, match_keys = load_data(nb_rows, nb_parties)
 
-
-quicksort(reports)
+HashSort(match_keys, nb_rows,0)
 
 print_reports(reports, nb_rows)
