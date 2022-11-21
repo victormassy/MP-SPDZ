@@ -74,12 +74,13 @@ def HashSort(data, N, low):
 	return data
 
 #program.use_split(3)
-nb_rows = 128
+nb_rows = 10
 nb_parties = 3
 
 
 reports, match_keys = load_data(nb_rows, nb_parties)
 
-HashSort(match_keys, nb_rows,0)
+#reports.sort()
+#HashSort(match_keys, nb_rows,0)
 
 print_reports(reports, nb_rows)
