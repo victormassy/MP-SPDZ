@@ -6,6 +6,7 @@ from Compiler.IPAsorts import mp_spdz_radix_sort
 from Compiler.library import sort as quicksort 
 from Compiler.library import odd_even_merge_sort
 from Compiler.instructions import print_reg 
+from Compiler.batcherSort import batcher_sort_matrix
 
 def print_reports_row(data, i):
     	print_ln('%s %s %s %s %s %s', data[i][0].reveal(), data[i][1].reveal(), data[i][2].reveal(), data[i][3].reveal(),data[i][4].reveal(),data[i][5].reveal())
@@ -74,13 +75,17 @@ def HashSort(data, N, low):
 	return data
 
 #program.use_split(3)
-nb_rows = 10
+nb_rows = 10 
 nb_parties = 3
 
 
 reports, match_keys = load_data(nb_rows, nb_parties)
 
-#reports.sort()
-#HashSort(match_keys, nb_rows,0)
 
+#reports.sort(key_indices=0).print_reveal_nested()
 print_reports(reports, nb_rows)
+#HashSort(match_keys, nb_rows,0)
+print_reports(batcher_sort_matrix(reports,match_keys),nb_rows)
+#print_reports(reports, nb_rows)
+
+
