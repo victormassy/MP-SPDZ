@@ -196,7 +196,8 @@ def aggregate(reports, breakdown_values, final_credits):
 
 
 
-
+numrows = 16
+breakdown_values = 100
 reports, match_keys = load_data(numrows)
 
 mp_spdz_radix_sort(match_keys, reports)
@@ -206,7 +207,7 @@ helperbits, final_credits = oblivious_attribution(
                 breakdown_values,
             )
 
-final_credits = capping_function(numrows, final_credits, helperbits)
+final_credits = parallel_capping(numrows, final_credits, helperbits)
 
 aggregate_results = aggregate(reports, breakdown_values, final_credits)
 print_ln('{"breakdown_keys": %s}', aggregate_results.reveal())
