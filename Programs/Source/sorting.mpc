@@ -5,7 +5,7 @@ def print_data_row(i):
 
 program.use_split(3)
 source = 0
-n = 1000000
+n = 1000
 
 data = Matrix(n, 6, sint)
 
@@ -17,8 +17,8 @@ def _(i):
 
 data.sort(n_bits=32)
 
-"""
+
 @for_range_opt(n)
 def _(i):
         print_data_row(i)
-"""
+
