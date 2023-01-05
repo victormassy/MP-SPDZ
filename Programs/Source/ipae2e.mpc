@@ -200,6 +200,8 @@ numrows = 16
 breakdown_values = 100
 reports, match_keys = load_data(numrows)
 
+print_reveal_nested(reports)
+
 mp_spdz_radix_sort(match_keys, reports)
 
 helperbits, final_credits = oblivious_attribution(
