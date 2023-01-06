@@ -207,4 +207,4 @@ helperbits, final_credits = oblivious_attribution(
             )
 
 final_credits = parallel_capping(numrows, final_credits, helperbits)
-aggregate_results = aggregate_opt(reports, breakdown_values, final_credits, sort_function)
+aggregate_results = aggregate_opt(reports, breakdown_values, final_credits, mp_spdz_radix_sort)
