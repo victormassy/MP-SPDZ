@@ -189,7 +189,7 @@ def aggregate_opt(reports, breakdown_values, final_credits, sort_function):
         same_key = (curr_key != next_key)
         print_ln_if(same_key.reveal(),"%s %s", curr_key.reveal(), sum.reveal())
         prev_key = curr_key  
-    print_ln("%s %s", matrix_value[numrows][0].reveal(), sum.reveal())
+    print_ln("%s %s", matrix_value[numrows-1][0].reveal(), sum.reveal()+matrix_value[numrows-1][1].reveal())
     
 
 
