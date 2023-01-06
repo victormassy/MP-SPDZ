@@ -174,7 +174,6 @@ def aggregate_opt(reports, breakdown_values, final_credits, sort_function):
     matrix_value.set_column(0, breakdown)
     matrix_value.set_column(1, final_credits.get_vector())
     mp_spdz_radix_sort(breakdown, matrix_value)
-    matrix_value.print_reveal_nested()
     
     prev_key = matrix_value[0][0]
     sum = 0
@@ -197,16 +196,12 @@ numrows = 16
 breakdown_values = 100
 reports, match_keys = load_data(numrows)
 
-reports.print_reveal_nested()
-
 mp_spdz_radix_sort(match_keys, reports)
-reports.print_reveal_nested()
 
 helperbits, final_credits = oblivious_attribution(
                 reports,
                 breakdown_values,
             )
-reports.print_reveal_nested()
 
 final_credits = parallel_capping(numrows, final_credits, helperbits)
 aggregate_results = aggregate_opt(reports, breakdown_values, final_credits, mp_spdz_radix_sort)
