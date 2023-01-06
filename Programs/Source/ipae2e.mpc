@@ -30,7 +30,7 @@ def load_data(nb_rows):
                     reports[i][j] += sint.get_input_from(k) 
     match_keys = reports.get_column(Columns.MATCHKEY)
     #reports.print_reveal_nested()
-    return reports, 
+    return reports, match_keys
 
 
 def oblivious_attribution(
