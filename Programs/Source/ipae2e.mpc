@@ -174,7 +174,7 @@ def aggregate_opt(reports, breakdown_values, final_credits, sort_function):
     matrix_value.set_column(0, breakdown)
     matrix_value.set_column(1, final_credits.get_vector())
     mp_spdz_radix_sort(breakdown, matrix_value)
-
+    matrix_value.print_reveal_nested()
     
     prev_key = matrix_value[0][0]
     sum = 0
