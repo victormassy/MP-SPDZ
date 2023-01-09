@@ -1,16 +1,14 @@
 import operator
 from enum import IntEnum
 from Compiler.sorting import radix_sort as mp_spdz_radix_sort
-from Compiler.library import print_ln, tree_reduce
 from Compiler.types import Array, Matrix, sint, sintbit
-from Compiler.library import print_ln_if, do_while
+
 
 
 class Columns(IntEnum):
     """
     Columns in the reports Matrix
     """
-
     MATCHKEY = 0
     IS_TRIGGER = 1
     VALUE = 2
