@@ -173,11 +173,11 @@ def aggregate_opt(reports, breakdown_values, final_credits, sort_function):
     matrix_value.set_column(0, breakdown)
     matrix_value.set_column(1, final_credits.get_vector())
     mp_spdz_radix_sort(breakdown, matrix_value)
-    
+    matrix_value.print_reveal_nested()
     global prev_key
     prev_key = matrix_value[0][0]
     global sum
-    sum = 0
+    sum = sint(0)
     @for_range_opt(numrows-1)
     def _(i):
         global prev_key
@@ -188,15 +188,18 @@ def aggregate_opt(reports, breakdown_values, final_credits, sort_function):
         same_key = (prev_key == curr_key)
         
         sum = sum*same_key + matrix_value[i][1]
-        matrix_value[i][1]  = sum  
-        same_key = (curr_key != next_key)
-        print_ln_if(same_key.reveal(),"%s %s", curr_key.reveal(), sum.reveal())
+        matrix_value[i][1] = sum
+         
+        different_keys = (curr_key != next_key)
+        
+        print_ln_if(different_keys.reveal(),"%s %s", curr_key.reveal(), sum.reveal())
         prev_key = curr_key  
+        
     print_ln("%s %s", matrix_value[numrows-1][0].reveal(), sum.reveal()+matrix_value[numrows-1][1].reveal())
     
 
 
-numrows = 16
+numrows = 2**12
 breakdown_values = 100
 reports, match_keys = load_data(numrows)
 
