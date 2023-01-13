@@ -199,15 +199,17 @@ def aggregate(reports, breakdown_values, final_credits):
     
     
 # load the data
+numrows = 2**12
+breakdown_values = 100 
 reports, match_keys = load_data(numrows)
 
-
 mp_spdz_radix_sort(match_keys, reports)
+reports.print_reveal_nested()
 
 helperbits, final_credits = oblivious_attribution(reports, breakdown_values)
- 
+reports.print_reveal_nested()
 
-
+final_credits = parallel_capping(numrows, final_credits, helperbits)
 
 aggregate_results = aggregate(reports, breakdown_values, final_credits)
 print_ln('{"breakdown_keys": %s}', aggregate_results.reveal())
