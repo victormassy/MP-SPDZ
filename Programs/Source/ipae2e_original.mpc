@@ -1,33 +1,28 @@
+"""
+IPA End-to-end MPC in MP-SPDZ
+"""
 import operator
 from enum import IntEnum
-from Compiler.sorting import radix_sort as mp_spdz_radix_sort
-from Compiler.types import Array, Matrix, sint, sintbit
 
+from Compiler.sorting import radix_sort as mp_spdz_radix_sort
+from Compiler.library import print_ln, tree_reduce
+from Compiler.types import Array, Matrix, sint, sintbit
 
 
 class Columns(IntEnum):
     """
-    Columns in the reports Matrix
+    These are the Columns in the reports Matrix
     """
+
     MATCHKEY = 0
     IS_TRIGGER = 1
     VALUE = 2
     BREAKDOWN_KEY = 3
 
 
-def load_data(nb_rows):   
-    reports = Matrix(nb_rows, 4, sint)
-    match_keys = Array(nb_rows, sint)
-    @for_range_opt(nb_rows)
-    def _(i): 
-            #For each field in the report 
-            @for_range_opt(4)
-            def _(j):
-                #Read input from different parties 
-                @for_range_opt(3)
-                def _(k):
-                    #Sum shares    
-                    reports[i][j] += sint.get_input_from(k) 
+def load_data(numrows):
+    reports = Matrix(numrows, 4, sint)
+    reports.assign_vector(sint.get_input_from(0, size=numrows * 4))
     match_keys = reports.get_column(Columns.MATCHKEY)
     return reports, match_keys
 
@@ -110,6 +105,29 @@ def oblivious_attribution(
     return helperbits, final_credits
 
 
+def sequential_capping(numrows, final_credits, helperbits):
+    # CAPPING
+    # (SEQUENTIAL CAPPING ALGORITHM)
+    # there is a known bug in this version of capping;
+    # we used the parallel version for PATCG benchmarks
+    print_ln("sequential capping")
+    current_contribution = Array(numrows, sint)
+    current_contribution.assign_vector(0)
+    cap = 10
+    rows = range(numrows)
+    for row in rows:
+        current_contribution[row] = current_contribution[row] * helperbits[row]
+
+        _min = (final_credits[row] < cap - current_contribution[row]).if_else(
+            final_credits[row], cap - current_contribution[row]
+        )
+
+        final_credits[row] = (current_contribution[row] <= cap) * _min
+        current_contribution[row] = current_contribution[row] + final_credits[row]
+
+    return final_credits
+
+
 def parallel_capping(numrows, final_credits, helperbits):
     # PARALLEL CAPPING ALGORITHM
     stopbit = Array(numrows, sint)
@@ -164,51 +182,32 @@ def parallel_capping(numrows, final_credits, helperbits):
     return final_credits
 
 
-def aggregate_opt(reports, breakdown_values, final_credits, sort_function):
+def aggregate(reports, breakdown_values, final_credits):
     # AGGREGATION
     breakdown = reports.get_column(Columns.BREAKDOWN_KEY)
-    numrows, _ = reports.sizes
-    matrix_value = Matrix(numrows, 2, sint)
-    
-    matrix_value.set_column(0, breakdown)
-    matrix_value.set_column(1, final_credits.get_vector())
-    mp_spdz_radix_sort(breakdown, matrix_value)
-    matrix_value.print_reveal_nested()
-    global prev_key
-    prev_key = matrix_value[0][0]
-    global sum
-    sum = sint(0)
-    @for_range_opt(numrows-1)
-    def _(i):
-        global prev_key
-        global sum
-        curr_key = matrix_value[i][0]
-        next_key = matrix_value[i+1][0]
-        
-        same_key = (prev_key == curr_key)
-        
-        sum = sum*same_key + matrix_value[i][1]
-        matrix_value[i][1] = sum
-         
-        different_keys = (curr_key != next_key)
-        
-        print_ln_if(different_keys.reveal(),"%s %s", curr_key.reveal(), sum.reveal())
-        prev_key = curr_key  
-        
-    print_ln("%s %s", matrix_value[numrows-1][0].reveal(), sum.reveal()+matrix_value[numrows-1][1].reveal())
-    
 
+    breakdown_keys = range(breakdown_values)
 
-numrows = 2**12
-breakdown_values = 100
+    # One can use sum, but tree_reduce appears to be more efficient
+    return Array(breakdown_values, sint).create_from(
+        [
+            tree_reduce(operator.add, (breakdown == breakdown_key) * final_credits)
+            for breakdown_key in breakdown_keys
+        ]
+    )
+    
+    
+    
+# load the data
 reports, match_keys = load_data(numrows)
+
 
 mp_spdz_radix_sort(match_keys, reports)
 
-helperbits, final_credits = oblivious_attribution(
-                reports,
-                breakdown_values,
-            )
+helperbits, final_credits = oblivious_attribution(reports, breakdown_values)
+ 
 
-final_credits = parallel_capping(numrows, final_credits, helperbits)
-aggregate_results = aggregate_opt(reports, breakdown_values, final_credits, mp_spdz_radix_sort)
+
+
+aggregate_results = aggregate(reports, breakdown_values, final_credits)
+print_ln('{"breakdown_keys": %s}', aggregate_results.reveal())
