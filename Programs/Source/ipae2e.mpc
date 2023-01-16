@@ -201,10 +201,9 @@ def aggregate_opt(reports, breakdown_values, final_credits, sort_function):
 import time
 
 
-start = (time.time_ns() // 1000000)
-
 numrows = 2**12
 breakdown_values = 100
+
 reports, match_keys = load_data(numrows)
 
 mp_spdz_radix_sort(match_keys, reports)
@@ -217,5 +216,4 @@ helperbits, final_credits = oblivious_attribution(
 final_credits = parallel_capping(numrows, final_credits, helperbits)
 aggregate_results = aggregate_opt(reports, breakdown_values, final_credits, mp_spdz_radix_sort)
 
-end = sint(time.time_ns() // 1000000)
-print_ln_if(aggregate_results, "Time (ms): %s", (end - start).reveal())
+
