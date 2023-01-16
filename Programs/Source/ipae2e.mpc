@@ -195,11 +195,8 @@ def aggregate_opt(reports, breakdown_values, final_credits, sort_function):
         prev_key = curr_key  
         
     print_ln("%s %s", matrix_value[numrows-1][0].reveal(), sum.reveal()+matrix_value[numrows-1][1].reveal())
-    return 1 
+     
     
-
-import time
-
 
 numrows = 2**12
 breakdown_values = 100
