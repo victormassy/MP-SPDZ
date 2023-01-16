@@ -195,8 +195,13 @@ def aggregate_opt(reports, breakdown_values, final_credits, sort_function):
         prev_key = curr_key  
         
     print_ln("%s %s", matrix_value[numrows-1][0].reveal(), sum.reveal()+matrix_value[numrows-1][1].reveal())
+    return 1 
     
 
+import time
+
+
+start = (time.time_ns() // 1000000)
 
 numrows = 2**12
 breakdown_values = 100
@@ -211,3 +216,6 @@ helperbits, final_credits = oblivious_attribution(
 
 final_credits = parallel_capping(numrows, final_credits, helperbits)
 aggregate_results = aggregate_opt(reports, breakdown_values, final_credits, mp_spdz_radix_sort)
+
+end = sint(time.time_ns() // 1000000)
+print_ln_if(aggregate_results, "Time (ms): %s", (end - start).reveal())
