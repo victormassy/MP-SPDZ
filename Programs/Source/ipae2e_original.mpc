@@ -110,7 +110,6 @@ def sequential_capping(numrows, final_credits, helperbits):
     # (SEQUENTIAL CAPPING ALGORITHM)
     # there is a known bug in this version of capping;
     # we used the parallel version for PATCG benchmarks
-    print_ln("sequential capping")
     current_contribution = Array(numrows, sint)
     current_contribution.assign_vector(0)
     cap = 10
@@ -198,16 +197,16 @@ def aggregate(reports, breakdown_values, final_credits):
     
     
     
-# load the data
 numrows = 2**12
 breakdown_values = 100 
+
 reports, match_keys = load_data(numrows)
 
 mp_spdz_radix_sort(match_keys, reports)
-reports.print_reveal_nested()
+
 
 helperbits, final_credits = oblivious_attribution(reports, breakdown_values)
-reports.print_reveal_nested()
+
 
 final_credits = parallel_capping(numrows, final_credits, helperbits)
 
