@@ -198,7 +198,7 @@ def aggregate_opt(reports, breakdown_values, final_credits, sort_function):
      
     
 
-numrows = 2**12
+numrows = 2**4
 breakdown_values = 100
 
 reports, match_keys = load_data(numrows)
