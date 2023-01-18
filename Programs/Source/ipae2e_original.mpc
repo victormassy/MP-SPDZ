@@ -19,13 +19,29 @@ class Columns(IntEnum):
     VALUE = 2
     BREAKDOWN_KEY = 3
 
-
+"""
 def load_data(numrows):
     reports = Matrix(numrows, 4, sint)
     reports.assign_vector(sint.get_input_from(0, size=numrows * 4))
     match_keys = reports.get_column(Columns.MATCHKEY)
     return reports, match_keys
+"""
 
+def load_data(nb_rows):
+    reports = Matrix(nb_rows, 4, sint)
+    match_keys = Array(nb_rows, sint)
+    @for_range_opt(nb_rows)
+    def _(i):
+            #For each field in the report
+            @for_range_opt(4)
+            def _(j):
+                #Read input from different parties
+                @for_range_opt(3)
+                def _(k):
+                    #Sum shares
+                    reports[i][j] += sint.get_input_from(k)
+    match_keys = reports.get_column(Columns.MATCHKEY)
+    return reports, match_keys
 
 def oblivious_attribution(
     reports: Matrix,
