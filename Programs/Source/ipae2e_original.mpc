@@ -213,7 +213,7 @@ def aggregate(reports, breakdown_values, final_credits):
     
     
     
-numrows = 2**12
+numrows = 2**8
 breakdown_values = 100 
 
 reports, match_keys = load_data(numrows)
