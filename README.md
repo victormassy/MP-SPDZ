@@ -34,4 +34,6 @@ chmod +x 100tests.sh
 ./100tests.sh 
 ```
 
+If you want to test another input size, you need to update the value in ipae2e_original.mpc
+You can test the modified version by replacing ipae2e_original.mpc with ipae2e_modified.mpc in 100tests.sh and 10tests.sh
 Execution times are stored in file times.txt in seconds (s). 
