@@ -1,4 +1,4 @@
-#./compile.py -R 32 ipae2e
+./compile.py -R 32 ipae2e_original
 rm times.txt
 rm data.txt
 for i in {0..9} ; do
