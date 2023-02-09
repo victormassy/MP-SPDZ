@@ -28,10 +28,16 @@ unzip 12_trig3_users_100.zip
 ```
  - Update Networking/coordination file with your confifuration. Check MP-SPDZ [documentation](https://mp-spdz.readthedocs.io/en/latest/networking.html) to get support. 
  - Modify 10tests.sh according to your configuration. 
+ - Setup SSL for the parties
+```
+Scripts/setup-ssl.sh 3
+```
+These creates keys stored in Player Data for execution on 3 VM you need to split the keys accordingly. (Party 0 has access to private key 0 and public key 0, 1 and 2) 
  - Run tests:
 ``` 
 cd ..
 chmod +x 100tests.sh 
+chmod +x 10tests.sh
 ./100tests.sh 12 
 ```
 Parameter of 100tests.sh is input size in power of two. 
