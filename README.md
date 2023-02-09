@@ -30,9 +30,11 @@ unzip 12_trig3_users_100.zip
  - Modify 10tests.sh according to your configuration. 
  - Run tests:
 ``` 
+cd ..
 chmod +x 100tests.sh 
-./100tests.sh 
+./100tests.sh 12 
 ```
+Parameter of 100tests.sh is input size in power of two. 
 
 If you want to test another input size, you need to update the value in ipae2e_original.mpc
 You can test the modified version by replacing ipae2e_original.mpc with ipae2e_modified.mpc in 100tests.sh and 10tests.sh
